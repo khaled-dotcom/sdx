@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Byte-compiled / optimized / DLL files
+*.so
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+
+# Application runtime
+.env
+.env.*
+uploads/
+reports/
+
+# Logs
+*.log

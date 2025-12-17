@@ -1,0 +1,24 @@
+flowchart LR
+  subgraph Client
+    UI[Browser UI: index.html + JS]
+    Upload[Video upload / record]
+    ReportBot[Floating Report Bot + Chat tab]
+  end
+
+  subgraph Server["Flask web_app.py"]
+    Routes[/upload<br/>/save_recorded_video<br/>/reports/list<br/>/report/:file<br/>/report/pdf/:file<br/>/chat/report<br/>/tts/]
+    Action[action_recognition.py<br/>Groq Vision (frame analysis + summary)]
+    PDF[app/pdf_utils.py<br/>Summary-only PDF]
+    TTS[app/tts.py<br/>playai-tts]
+  end
+
+  Storage[(uploads/)]
+  Reports[(reports/*.txt<br/>summary PDFs on demand)]
+
+  Upload -->|video| Routes --> Action --> Reports
+  Reports -->|list/download| UI
+  Routes --> PDF --> UI
+  ReportBot -->|questions| Routes --> Reports
+  Routes --> TTS --> UI
+  UI -->|notifications| UI
+

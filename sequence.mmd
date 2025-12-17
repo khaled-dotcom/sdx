@@ -1,0 +1,36 @@
+sequenceDiagram
+  participant User
+  participant UI as Browser UI
+  participant Flask as Flask / web_app.py
+  participant Action as ActionRecognitionSystem
+  participant Reports as reports/*.txt
+  participant PDF as Summary PDF (on demand)
+  participant TTS as playai-tts
+
+  User->>UI: Upload or record video
+  UI->>Flask: POST /upload (video, frame_interval, model?)
+  Flask->>Action: process_video_file()
+  Action-->>Flask: summary text
+  Flask->>Reports: save report_<ts>.txt
+  Flask-->>UI: JSON {report, report_file}
+  UI-->>User: Show report, enable downloads
+
+  User->>UI: Click "Download Report"
+  UI->>Flask: GET /report/<file>
+  Flask-->>User: TXT file
+
+  User->>UI: Click "Download Summary PDF"
+  UI->>Flask: GET /report/pdf/<file>
+  Flask->>PDF: build summary-only PDF
+  Flask-->>User: PDF
+
+  User->>UI: Ask report bot
+  UI->>Flask: POST /chat/report {message, report_file}
+  Flask->>Reports: load content
+  Flask-->>UI: reply text
+
+  User->>UI: Click "Speak last reply"
+  UI->>Flask: POST /tts {text}
+  Flask->>TTS: synthesize speech
+  Flask-->>User: wav audio
+
